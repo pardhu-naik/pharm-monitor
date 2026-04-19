@@ -1,0 +1,14 @@
+# PHP
+.phpunit.result.cache
+/vendor/
+
+# Database
+*.sql
+
+# System Files
+.DS_Store
+Thumbs.db
+
+# Project specific
+invoices/
+backup/
