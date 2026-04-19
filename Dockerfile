@@ -1,19 +1,25 @@
-FROM php:8.1-apache
+FROM php:8.2-apache
 
-# Disable conflicting MPM modules
-RUN a2dismod mpm_event || true
-RUN a2dismod mpm_worker || true
+# Remove conflicting modules
+RUN a2dismod mpm_event
+RUN a2dismod mpm_worker
 
-# Enable prefork (works best with PHP)
+# Enable prefork (required for PHP)
 RUN a2enmod mpm_prefork
 
-# Enable rewrite if needed
-RUN a2enmod rewrite
+# Enable useful Apache modules
+RUN a2enmod rewrite headers
 
-# Copy project files
-COPY . /var/www/html/
+# Set working directory
+WORKDIR /var/www/html
 
-# Set permissions
+# Copy project
+COPY . .
+
+# Fix permissions
 RUN chown -R www-data:www-data /var/www/html
+
+# Apache config fix
+RUN echo "ServerName localhost" >> /etc/apache2/apache2.conf
 
 EXPOSE 80
